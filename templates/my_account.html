@@ -1,0 +1,17 @@
+{%extends 'base.html'%}
+{% block title%}
+Edit Account
+{% endblock %}
+{%block breadcrumb%}
+    <li class="breadcrumb-item active" >
+                Account
+            </li>
+{% endblock %}
+{%block content%}
+    <form method="post">
+        {%csrf_token%}
+        {%include 'includes/form.html'%}
+
+        <button type="submit" class="btn btn-primary">edit</button>
+    </form>
+{% endblock %}
