@@ -1,8 +1,8 @@
 from django.shortcuts import redirect
-from django.views.generic import CreateView
+from django.views.generic import CreateView, UpdateView
 from .forms import *
 from django.urls import reverse_lazy
-from django.contrib.auth.mixins import UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth import views , login
 from .models import UserRole
 
@@ -25,17 +25,14 @@ class SignUpView(UserPassesTestMixin, CreateView):
             return redirect('home')
     
     def form_valid(self, form):
-        # 1. حفظ اليوزر في الداتابيز
         user = form.save(commit=False)
         customer_role, created = UserRole.objects.get_or_create(name='User')
         user.user_role = customer_role
         user.is_active = True
         user.save()
         
-        self.object = user
-        
       
-        login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
+        login(self.request, user)
         
         return redirect('home')
     
@@ -52,3 +49,13 @@ class Login(views.LoginView):
             return reverse_lazy('home')
     
     
+class UserUpdateView(LoginRequiredMixin, UpdateView):
+    model = User
+    form_class = UserUpdateForm
+    template_name = 'my_account.html'
+    success_url = reverse_lazy('home')
+
+    def get_object(self):
+        return self.request.user
+
+

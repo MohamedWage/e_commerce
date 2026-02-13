@@ -9,7 +9,7 @@
 {%block body%}
 <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
     <div class="container">
-      <a class="navbar-brand" href="{% url 'home' %}">Django Boards</a>
+      <a class="navbar-brand" href="{% url 'home' %}">Django E-commerce</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainMenu" aria-controls="mainMenu" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -18,11 +18,11 @@
     {% if user.is_authenticated %}
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Welcome, {{ user.username }}
+            Welcome, {{ user.first_name }} {{user.second_name}}
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
-            {% comment %} <a class="dropdown-item" href="{%url 'my_account'%}">My account</a> {% endcomment %}
-            {% comment %} <a class="dropdown-item" href="{%url 'change_password'%}">Change password</a> {% endcomment %}
+            <a class="dropdown-item" href="{%url 'my_account'%}">My account</a>
+            <a class="dropdown-item" href="{%url 'changepass'%}">Change password</a>
             <div class="dropdown-divider"></div>
             <form method="post" action="{% url 'logout' %}">
                 {% csrf_token %}
