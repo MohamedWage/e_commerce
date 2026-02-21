@@ -8,5 +8,25 @@ E-Commerce
             </li>
 {% endblock %}
 {%block content%}
-test
+<div class="container">
+            <div class="row">
+{%for product in products%}
+<div class="card m-2 col-3 " >
+    <img class="card-img-top" height="250" width ="100" src="{{ product.image.url}}" alt="{{product.name}}">
+    <div class="card-body">
+    <h5 class="card-title">{{ product.name  }}</h5>
+    <p class="card-text">{{ product.description }}</p>
+    <p class="card-text">the price is: {{ product.selling_price}}</p>
+    {% with p_id=product.id|stringformat:"s" %}
+        {% if p_id in request.session.cart %}
+            <a href="{% url 'addtocart' product.id %}" class="btn btn-danger mt-auto">remove from Cart </a>
+        {% else %}
+            <a href="{% url 'addtocart' product.id %}" class="btn btn-primary mt-auto">add to cart</a>
+        {% endif %}
+    {% endwith %}
+      </div>
+    </div>
+    {%endfor%}
+</div>
+</div>
 {% endblock %}

@@ -39,7 +39,7 @@ class User(AbstractBaseUser):
     email = models.EmailField(unique=True,max_length=255,)
     first_name = models.CharField(max_length=50)
     second_name = models.CharField(max_length=50)
-    user_role = models.ForeignKey(UserRole,related_name='role', on_delete=models.CASCADE,null=True, blank=True)
+    user_role = models.ForeignKey(UserRole,related_name='role', on_delete=models.CASCADE)
     is_active = models.BooleanField(default=True)
     date_joined =models.DateTimeField(auto_now_add=True)
     USERNAME_FIELD = 'email'
@@ -71,6 +71,7 @@ class Product(models.Model):
     name = models.CharField(max_length=50)
     description = models.TextField(max_length=1024)
     Category = models.ForeignKey(Category,related_name="category",on_delete=models.CASCADE)
+    image = models.ImageField()
     # user = models.ForeignKey(User,related_name="user",on_delete=models.CASCADE)
     selling_price = models.DecimalField(max_digits=10, decimal_places=2)
     Purchase_price = models.DecimalField(max_digits=10, decimal_places=2)

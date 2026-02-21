@@ -19,10 +19,7 @@ class SignUpView(UserPassesTestMixin, CreateView):
     def handle_no_permission(self):
         user = self.request.user
         
-        if user.user_role and user.user_role.name == 'Admin':
-            return redirect('admin:index') 
-        else:
-            return redirect('home')
+        return redirect('home')
     
     def form_valid(self, form):
         user = form.save(commit=False)
