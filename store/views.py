@@ -4,10 +4,13 @@ from django.views import View
 from django.shortcuts import get_object_or_404
 from account.models import *
 from django.contrib.auth.mixins import LoginRequiredMixin
+
 # Create your views here.
 
 
 class ProductView(ListView):
+    paginate_by = 20
+    ordering = ['-created_date']
     model = Product
     template_name = 'home.html'
     context_object_name = 'products'
