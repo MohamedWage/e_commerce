@@ -27,5 +27,9 @@ urlpatterns = [
     path('change_password/done/',
          auth_views.PasswordChangeDoneView.as_view(template_name='change_password_done.html'),
          name='password_change_done'),
-    path('myacount/',views.UserUpdateView.as_view(),name='my_account')
+    path('myacount/',views.UserUpdateView.as_view(),name='my_account'),
+    path('verify_email',views.VerifyEmailView.as_view(),name='verify_page'),
+    path('resend-code/', views.ResendVerifyCodeView.as_view(), name='resend_code'),
+    path('forgetpass/',views.ForgetPassView.as_view(),name='forgetpass'),
+    path('newpass/',views.NewPassView.as_view(),name='newpass'),
 ]

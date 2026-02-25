@@ -42,6 +42,8 @@ class User(AbstractBaseUser):
     user_role = models.ForeignKey(UserRole,related_name='role', on_delete=models.CASCADE)
     is_active = models.BooleanField(default=True)
     date_joined =models.DateTimeField(auto_now_add=True)
+    is_verified = models.BooleanField(default=False)
+    verify_code = models.CharField( max_length=6,null=True,blank=True)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'second_name']
     def __str__(self):
