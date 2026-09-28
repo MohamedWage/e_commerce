@@ -31,6 +31,9 @@ class CategoryDetailView(ListView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        # تمرير القسم الحالي للمفرد
+        context['category'] = self.category
+        # تمرير كل الأقسام للـ Sidebar/Navbar
         context['categories'] = Category.objects.all()
         return context
     
@@ -86,7 +89,7 @@ class ManageCart(View):
             cart[product_id_str] = cart.get(product_id_str) + 1
         elif action == 'minus':
             if cart[product_id_str] >1:
-                cart[product_id_str] = cart.get(product_id_str) + 1
+                cart[product_id_str] = cart.get(product_id_str) - 1
             else:
                 del cart[product_id_str]
         

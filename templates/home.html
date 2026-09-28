@@ -1,72 +1,96 @@
-{%extends 'base.html'%} {% block title%} E-Commerce {% endblock %}
- {%block breadcrumb%}
-<li class="breadcrumb-item active">E-Commerce</li>
-{% endblock %} {%block content%}
+{% extends 'base.html' %} 
+{% block title %} E-Commerce {% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item active">
+  {% if category %}
+    {{ category.name }}
+  {% else %}
+    E-Commerce
+  {% endif %}
+</li>
+{% endblock %} 
+
+{% block content %}
 <div class="container">
   <div class="row">
-    {%for product in products%}
+    {% for product in products %}
     <div class="card m-2 col-3">
       <img
         class="card-img-top"
         height="250"
         width="100"
-        src="{{ product.image.url}}"
-        alt="{{product.name}}"
+        src="{{ product.image.url }}"
+        alt="{{ product.name }}"
       />
       <div class="card-body">
         <h5 class="card-title">{{ product.name }}</h5>
         <p class="card-text">{{ product.description }}</p>
-        <p class="card-text">the price is: {{ product.selling_price}}</p>
+        <p class="card-text">the price is: {{ product.selling_price }}</p>
         {% with p_id=product.id|stringformat:"s" %}
-         {% if p_id in request.session.cart %}
-        <a
-          href="{% url 'addtocart' product.id %}"
-          class="btn btn-danger mt-auto"
-          >remove from Cart
-        </a>
-        {% else %}
-        <a
-          href="{% url 'addtocart' product.id %}"
-          class="btn btn-primary mt-auto"
-          >add to cart</a
-        >
-        {% endif %} {% endwith %}
+          {% if p_id in request.session.cart %}
+            <a
+              href="{% url 'addtocart' product.id %}"
+              class="btn btn-danger mt-auto"
+              >remove from Cart</a
+            >
+          {% else %}
+            <a
+              href="{% url 'addtocart' product.id %}"
+              class="btn btn-primary mt-auto"
+              >add to cart</a
+            >
+          {% endif %} 
+        {% endwith %}
       </div>
     </div>
-    {%endfor%}
+    {% empty %}
+    <!-- الرسالة التي تظهر في حالة عدم وجود منتجات داخل الكاتيجوري -->
+    <div class="col-12 my-5 text-center">
+      <div class="alert alert-info" role="alert">
+        <h4>
+          No products added in {% if category %}{{ category.name }}{% else %}this category{% endif %} yet.
+        </h4>
+      </div>
+    </div>
+    {% endfor %}
   </div>
-  <ul class="pagination">
-    {%if page_obj.has_previous%}
+
+  <!-- يظهر الترقيم (Pagination) فقط في حالة وجود منتجات -->
+  {% if products %}
+  <ul class="pagination mt-4">
+    {% if page_obj.has_previous %}
     <li class="page-item">
-      <a class="page-link" href="?page={{page_obj.previous_page_number}}">
-        Back
-      </a>
-    </li>
-    {%else%}
-    <li class="page-item disabled">
-      <span class="page-link"> Back </span>
-    </li>
-    {%endif%}
-     {%for page in page_obj.paginator.page_range%}
-      {%if page_obj.number == page %}
-    <li class="page-item active">
-      <span class="page-link"> {{page}} </span>
+      <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Back</a>
     </li>
     {% else %}
-    <li class="page-item">
-      <a class="page-link" href="?page={{page}}"> {{page}} </a>
-    </li>
-    {%endif%}
-    {%endfor%}
-    {%if page_obj.has_next%}
-    <li class="page-item">
-      <a class="page-link" href="?page={{page_obj.next_page_number}}"> Next </a>
-    </li>
-    {%else%}
     <li class="page-item disabled">
-      <span class="page-link"> Next </span>
+      <span class="page-link">Back</span>
     </li>
-    {%endif%}
+    {% endif %}
+
+    {% for page in page_obj.paginator.page_range %}
+      {% if page_obj.number == page %}
+      <li class="page-item active">
+        <span class="page-link">{{ page }}</span>
+      </li>
+      {% else %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page }}">{{ page }}</a>
+      </li>
+      {% endif %}
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+    </li>
+    {% else %}
+    <li class="page-item disabled">
+      <span class="page-link">Next</span>
+    </li>
+    {% endif %}
   </ul>
+  {% endif %}
 </div>
 {% endblock %}

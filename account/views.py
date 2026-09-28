@@ -34,6 +34,7 @@ class SignUpView(UserPassesTestMixin, CreateView):
     def form_valid(self, form):
         user = form.save(commit=False)
         user.user_role, _ = UserRole.objects.get_or_create(name='User')
+        user.is_active = False
         user.save()
         
         send_verification_email(user, "Welcome to e-commerce" )
@@ -78,6 +79,8 @@ class VerifyEmailView(FormView):
         if not email: return redirect('login')
         
         user = get_object_or_404(User, email=email)
+        if user.is_active == True:
+            return redirect('login')
         if not user.verify_code:
             send_verification_email(user)
             
@@ -138,9 +141,10 @@ class NewPassView(FormView):
         user.set_password(new_password)
         
         user.save()
-        del self.request.session['user_verification_email']
-        del self.request.session['is_reset_password']
+
+        self.request.session.pop('user_verification_email',None)
+        self.request.session.pop('is_reset_password',None)
         login(self.request, user)
 
         return redirect('home')
-    
+        
