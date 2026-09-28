@@ -1,9 +1,0 @@
-.env
-__pycache__/
-*.py[cod]
-db.sqlite3
-media/
-.vscode/
-.idea/
-venv/
-env/
